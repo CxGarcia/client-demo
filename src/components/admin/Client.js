@@ -6,8 +6,8 @@ function Client({ id, fullname, email, onRemove, onEdit }) {
     onRemove(id);
   }
 
-  function openEditPanel() {
-    console.log("open edit panel");
+  function handleEdit() {
+    onEdit(id);
   }
 
   return (
@@ -16,7 +16,7 @@ function Client({ id, fullname, email, onRemove, onEdit }) {
       <td>{fullname}</td>
       <td>{email}</td>
       <td>
-        <button className="edit-action" onClick={openEditPanel} id={id}>
+        <button className="edit-action" onClick={handleEdit} id={id}>
           Edit
         </button>
       </td>

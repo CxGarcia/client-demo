@@ -29,17 +29,18 @@ function Panel() {
     };
   }, []);
 
-  function handleRemove(id) {
-    //Delete from Firestore
-    deleteById("clients", id);
+  //Delete from Firestore
+  const handleRemove = (id) => deleteById("clients", id);
+
+  function getClientRecordById(id) {
+    const clientArr = [...clients];
+    console.log(clientArr.find((client) => client.id === id));
   }
 
-  // function handleEdit(id, updateObj) {
-  //   //Update document by ID with new data passed in the updateObj
-  //   //TODO panel for edit
-  //   console.log(updateObj);
-  //   // editById("clients", id, updateObj);
-  // }
+  function handleEdit(id, updateObj) {
+    // const clientRecord =
+    // editById("clients", id, updateObj);
+  }
 
   function handleSort() {
     const clientArr = [...clients];
@@ -65,7 +66,7 @@ function Panel() {
       <ClientTable
         clients={clients}
         onRemove={handleRemove}
-        // onEdit={handleEdit}
+        onEdit={getClientRecordById}
       />
     </div>
   );
