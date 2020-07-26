@@ -1,10 +1,10 @@
 import React from "react";
 import Client from "./Client";
 
-function ClientTable({ clients, onRemove }) {
+function ClientTable({ clients, onRemove, onEdit }) {
   let header;
 
-  if (clients[0]) {
+  if (clients[0] != undefined) {
     const cl = clients[0];
     const keys = Object.keys(cl);
     header = keys.map((key, index) => {
@@ -21,13 +21,13 @@ function ClientTable({ clients, onRemove }) {
         email={email}
         key={index}
         onRemove={onRemove}
+        onEdit={onEdit}
       />
     );
   });
 
   return (
     <div>
-      <h1 id="title">React Dynamic Table</h1>
       <table id="clients">
         <tbody>
           <tr>{header}</tr>

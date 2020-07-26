@@ -1,12 +1,13 @@
 import React from "react";
+// import EditPanel from "./EditPanel";
 
-function Client({ id, fullname, email, onRemove }) {
+function Client({ id, fullname, email, onRemove, onEdit }) {
   function removeClient() {
     onRemove(id);
   }
 
-  function editClient() {
-    console.log("edit");
+  function openEditPanel() {
+    console.log("open edit panel");
   }
 
   return (
@@ -15,7 +16,7 @@ function Client({ id, fullname, email, onRemove }) {
       <td>{fullname}</td>
       <td>{email}</td>
       <td>
-        <button className="remove-action" onClick={editClient} id={id}>
+        <button className="edit-action" onClick={openEditPanel} id={id}>
           Edit
         </button>
       </td>
@@ -29,3 +30,9 @@ function Client({ id, fullname, email, onRemove }) {
 }
 
 export default Client;
+
+/*
+        MUST WRAP EVERYTHING IN A DIV
+        <tr>
+        <EditPanel id={id} fullname={fullname} email={email} onEdit={onEdit} />
+      </tr> */
