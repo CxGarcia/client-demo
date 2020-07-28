@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { addCollection } from "../../utilities/addCollection";
-
-import Panel from "../admin/Panel";
+// import { useForm } from "react-hook-form";
+import { storage, editById, addCollection } from "../../utils/firebase";
+import "./Form.css";
 
 function Form() {
   const [prospect, setProspect] = useState({});
-  // const { register, handleSubmit, errors } = useForm({
-  //   // mode: "onBlur",
-  // });
+  const [file, setFile] = useState({});
 
   function handleProspect(event) {
     event.preventDefault();
@@ -16,13 +13,40 @@ function Form() {
     setProspect({ ...prospect, [event.target.name]: event.target.value });
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    addCollection("clients", prospect);
+    const collection = "clients";
+
+    const Id = await addCollection(collection, prospect).then((res) => res.id);
+
+    console.log(Id);
+    // editById("clients", Id, prospect);
+
+    const downloadURL = await storage
+      .ref()
+      .child(collection)
+      .child(Id)
+      .child("file")
+      .put(file)
+      .then((res) => res.ref.getDownloadURL());
+
+    editById(collection, Id, { url: downloadURL });
   }
 
+  function handleChange(file) {
+    // console.log(event.target.file);
+    if (!file) return;
+
+    let blob = new Blob(file, { type: "application/pdf" });
+    // console.warn(file); // Watch Screenshot
+    console.log(blob);
+
+    setFile(blob);
+  }
+  // function getFile() {}
+
   return (
-    <div className="App">
+    <div className="form">
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <input
           type="text"
@@ -36,10 +60,25 @@ function Form() {
           placeholder="Email"
           onChange={handleProspect}
         />
+        <input
+          type="text"
+          name="company"
+          placeholder="Company"
+          onChange={handleProspect}
+        />
+        <input
+          type="text"
+          name="adress"
+          placeholder="Address"
+          onChange={handleProspect}
+        />
+        <input
+          type="file"
+          onChange={(event) => handleChange(event.target.files)}
+          name="file"
+        />
         <button type="submit">Submit</button>
       </form>
-
-      <Panel />
     </div>
   );
 }
