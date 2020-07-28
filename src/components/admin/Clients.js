@@ -46,12 +46,12 @@ export const ClientInfo = (props) => {
         <TextField source="fullname" />
         <EmailField source="email" />
         <FileField
-          source="url"
-          title="sample-upload"
+          source="pdf"
+          title="Client-Files"
           target="_blank"
           download={true}
         />
-        <ImageField source="url" src="url" />
+        <ImageField source="signature" src="signature" />
       </SimpleShowLayout>
     </Show>
   );

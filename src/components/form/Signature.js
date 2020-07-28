@@ -26,9 +26,6 @@ function Signature({ signature }) {
         <button onClick={clear}>Clear</button>
         <button onClick={trim}>Trim</button>
       </div>
-      {/* {trimmedDataURL ? (
-        <img className={styles.sigImage} src={trimmedDataURL} />
-      ) : null} */}
     </>
   );
 }

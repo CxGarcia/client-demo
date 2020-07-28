@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 // import { useForm } from "react-hook-form";
-import { storage, editById, addCollection } from "../../utils/firebase";
+import { editById, addCollection, putFiles } from "../../utils/firebase";
 import "./Form.css";
 import Signature from "./Signature";
 
 function Form() {
   const [prospect, setProspect] = useState({});
-  const [file, setFile] = useState({});
+  const [files, setFiles] = useState([]);
 
   function handleProspect(event) {
     event.preventDefault();
@@ -17,21 +17,16 @@ function Form() {
   async function handleSubmit(event) {
     event.preventDefault();
     const collection = "clients";
-
-    const Id = await addCollection(collection, prospect).then((res) => res.id);
-
-    // editById("clients", Id, prospect);
-    console.log(file);
-
-    const downloadURL = await storage
-      .ref()
-      .child(collection)
-      .child(Id)
-      .child("file")
-      .put(file)
-      .then((res) => res.ref.getDownloadURL());
-
-    editById(collection, Id, { url: downloadURL });
+    const id = await addCollection(collection, prospect).then((res) => res.id);
+    editById("clients", id, prospect);
+    const fileUrl = await putFiles(files.pdf, collection, id, "pdf");
+    const signatureUrl = await putFiles(
+      files.signature,
+      collection,
+      id,
+      "signature"
+    );
+    editById(collection, id, { pdf: fileUrl, signature: signatureUrl });
   }
 
   function handleChange(file) {
@@ -39,15 +34,14 @@ function Form() {
 
     //convert file to Blob
     let blob = new Blob(file, { type: "application/pdf" });
-    setFile(blob);
+    setFiles({ ...files, pdf: blob });
   }
 
   async function handleSignature(file) {
     if (!file) return;
 
     const blob = await fetch(file.trimmedDataURL).then((res) => res.blob());
-    console.log(blob);
-    setFile(blob);
+    setFiles({ ...files, signature: blob });
   }
   // function getFile() {}
 
@@ -86,10 +80,10 @@ function Form() {
           type="file"
           onChange={(event) => handleChange(event.target.files)}
           name="file"
-          // required
+          required
         />
         <p>Sign Here</p>
-        <Signature signature={handleSignature} />
+        <Signature signature={handleSignature} required />
         <button type="submit">Submit</button>
       </form>
     </div>

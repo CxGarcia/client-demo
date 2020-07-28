@@ -43,6 +43,19 @@ export async function getCollection(collection) {
   return dbArr;
 }
 
+export function putFiles(file, collection, id, name) {
+  return storage
+    .ref()
+    .child(collection)
+    .child(id)
+    .child(name)
+    .put(file)
+    .then((res) => res.ref.getDownloadURL())
+    .catch((error) => {
+      console.log("Upload Failed:", error.message);
+    });
+}
+
 // //TODO
 // export function generateId(collection) {
 //   const generator = db.collection(collection).doc();
