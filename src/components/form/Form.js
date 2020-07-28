@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // import { useForm } from "react-hook-form";
 import { storage, editById, addCollection } from "../../utils/firebase";
 import "./Form.css";
+import Signature from "./Signature";
 
 function Form() {
   const [prospect, setProspect] = useState({});
@@ -19,8 +20,8 @@ function Form() {
 
     const Id = await addCollection(collection, prospect).then((res) => res.id);
 
-    console.log(Id);
     // editById("clients", Id, prospect);
+    console.log(file);
 
     const downloadURL = await storage
       .ref()
@@ -34,13 +35,18 @@ function Form() {
   }
 
   function handleChange(file) {
-    // console.log(event.target.file);
     if (!file) return;
 
+    //convert file to Blob
     let blob = new Blob(file, { type: "application/pdf" });
-    // console.warn(file); // Watch Screenshot
-    console.log(blob);
+    setFile(blob);
+  }
 
+  async function handleSignature(file) {
+    if (!file) return;
+
+    const blob = await fetch(file.trimmedDataURL).then((res) => res.blob());
+    console.log(blob);
     setFile(blob);
   }
   // function getFile() {}
@@ -53,30 +59,37 @@ function Form() {
           name="fullname"
           placeholder="Name"
           onChange={handleProspect}
+          required
         />
         <input
           type="email"
           name="email"
           placeholder="Email"
           onChange={handleProspect}
+          required
         />
         <input
           type="text"
           name="company"
           placeholder="Company"
           onChange={handleProspect}
+          required
         />
         <input
           type="text"
           name="adress"
           placeholder="Address"
           onChange={handleProspect}
+          required
         />
         <input
           type="file"
           onChange={(event) => handleChange(event.target.files)}
           name="file"
+          // required
         />
+        <p>Sign Here</p>
+        <Signature signature={handleSignature} />
         <button type="submit">Submit</button>
       </form>
     </div>

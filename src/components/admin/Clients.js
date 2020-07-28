@@ -15,6 +15,7 @@ import {
   DeleteButton,
   EmailField,
   FileField,
+  ImageField,
 } from "react-admin";
 
 const ClientFilter = (props) => (
@@ -44,7 +45,13 @@ export const ClientInfo = (props) => {
         <TextField source="id" />
         <TextField source="fullname" />
         <EmailField source="email" />
-        <FileField source="url" title="file" download={true} />
+        <FileField
+          source="url"
+          title="sample-upload"
+          target="_blank"
+          download={true}
+        />
+        <ImageField source="url" src="url" />
       </SimpleShowLayout>
     </Show>
   );

@@ -17,3 +17,15 @@ form input {
   width: 25%;
   /* border: 1px solid goldenrod; */
 }
+
+form p {
+  margin: 0;
+  padding: 0;
+  width: 25%;
+}
+.sigCanvas {
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 25%;
+  margin-top: 0;
+}
