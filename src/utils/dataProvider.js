@@ -215,13 +215,35 @@ export const dataProvider = (type, resource, params) => {
 
     case DELETE: {
       console.log("Delete record id", params.id);
-      return db
-        .collection(resource)
-        .doc(params.id)
-        .delete()
-        .then(() => {
-          return { data: params.previousData };
-        });
+      console.log(params);
+
+      return (
+        db
+          .collection(resource)
+          .doc(params.id)
+          .delete()
+          .then(() => {
+            return { data: params.previousData };
+          }),
+        storage
+          .ref()
+          .child(resource)
+          .child(params.id)
+          .child("pdf")
+          .delete()
+          .then(() => {
+            return { data: params.previousData };
+          }),
+        storage
+          .ref()
+          .child(resource)
+          .child(params.id)
+          .child("signature")
+          .delete()
+          .then(() => {
+            return { data: params.previousData };
+          })
+      );
     }
 
     case DELETE_MANY: {
